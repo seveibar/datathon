@@ -24,20 +24,20 @@ def get_yval(p_sc, cc, yearno):
     p_sc_years = dat[(dat["Series Code"] == p_sc) & (dat['Country Code'] == cc)][0]
     p_sc_inc = p_sc_years[years[yearno_s - 1]] - p_sc_years[years[yearno_s - deltay - 1]]
     return p_sc_inc
-    
+
 def get_training_matrix(p_sc=b"SL.TLF.TOTL.FE.ZS", cc=b"USA"):
 
     # Loop through all the years we know this series code < maxyear
     sc_features = []
     sc_out = []
     for yearno in range(minyear + deltay, maxyear):
-        
+
         xrow = get_xrow(p_sc, cc, yearno)
         sc_inc = get_yval(p_sc, cc, yearno)
-        
+
         sc_features.append(xrow)
         sc_out.append(sc_inc)
-        
+
 
     sc_features = np.array(sc_features)
     sc_out = np.array(sc_out)
