@@ -42,3 +42,8 @@ def get_training_matrix(p_sc=b"SL.TLF.TOTL.FE.ZS", cc=b"USA"):
     sc_features = np.array(sc_features)
     sc_out = np.array(sc_out)
     return sc_features, sc_out
+
+def get_feature_value(p_sc, cc, year, idat=None):
+    if idat is None:
+        idat = dat
+    return idat[(dat["Series Code"] == p_sc) & (dat['Country Code'] == cc)][0][years[year-1991]]
