@@ -1,17 +1,19 @@
 from sklearn.externals import joblib
 from sklearn.svm import SVR
+import data_matrix
 
-def regression(y_table):
-    #TODO figure out how x_table is being sent to me and possibly format it
+def regression(table):
     clf = joblib.load('model.pkl')
-    return clf.predict([y_table])
+    return clf.predict([table])
 
 if __name__ == '__main__':
 
     #TODO format X and Y value from main
-    #X = [[0.6,0.5 , 0.4], [0.7, 0.9,0.7], [0.8,1.4,1.2]]
-    #y=[100,120,130]
+
+    X,y = data_matrix.get_training_matrix()
     clf = SVR()
-    clf.fit(X, y)
+    clf.fit(X[:-1], y[:-1])
     joblib.dump(clf, 'model.pkl')
-    print classify(y)
+    print regression(X[-1])
+    print y[-1]
+    print y

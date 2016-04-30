@@ -6,8 +6,9 @@ app = Flask(__name__, static_url_path='')
 
 @app.route('/recalculate', methods=['GET','POST'])
 def recalculate():
-    x_table = #TODO get x_table
-
+    #x_table = #TODO get x_table
+    #new_value = request.form['<?>']
+    
 
 
 if __name__ == '__main__':
