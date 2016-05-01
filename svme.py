@@ -23,10 +23,10 @@ def spike_effect_across_world(p_sc, spike_sc, spike_cc, spike_amt):
         normal_prediction = svm.predict(data_2015)[0]
         spike_X,key_2015 = dm.get_xrow_with_spike(p_sc=p_sc, p_cc=p_cc, year=2015, spike_sc=spike_sc, spike_cc=spike_cc, spike_amt=spike_amt)
         spike_prediction = svm.predict(spike_X)[0]
-        result[p_cc] = spike_prediction - normal_prediction
+        result[p_cc.decode("ascii")] = spike_prediction - normal_prediction
 
     avg = np.sum(result[k] for k in result.keys()) / len(result.keys())
     for k in result.keys():
         result[k] = result[k] / avg
 
-    return result    
+    return result
