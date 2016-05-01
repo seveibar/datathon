@@ -14,6 +14,40 @@ rangeSlider.noUiSlider.on('update', function( values, handle ) {
 });
 
 // Map UI
+
+function loadMap(countries, values){
+	var data = [{
+	            type: 'choropleth',
+	            locationmode: 'country names',
+	            locations: countries,
+	            z: values,
+	            text: countries,
+	            autocolorscale: true
+	        }];
+
+	var layout = {
+	        title: '',
+	        geo: {
+	          projection: {
+	            type: 'robinson'
+	          }
+	        },
+	        width: 960,
+	        height: 600
+	    };
+	    Plotly.plot(map, data, layout, {showLink: false});
+	    setTimeout(function() {
+	        var default_value = "USA"
+	        selectCountry({id: default_value});
+	        d3.selectAll('path.choroplethlocation')
+	            .on('click', selectCountry)
+	            .on('dblclick.zoom', null);
+	    }, 500);
+
+}
+
+
+
 Plotly.d3.csv('https://raw.githubusercontent.com/plotly/datasets/master/2010_alcohol_consumption_by_country.csv', function(err, rows){
     function unpack(rows, key) {
         return rows.map(function(row) { return row[key]; });

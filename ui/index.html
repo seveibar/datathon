@@ -7,19 +7,53 @@
   <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
   <script src="js/jquery-1.12.3.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.3.5/d3.js"></script>
+  <script>
+
+  function ctranslate(c){
+    var names = ["USA","China","Indonesia","India","Brazil","Pakistan","Nigeria","Bangladesh","Russia","Japan","Mexico","Philippines","Ethiopia","Vietnam","Egypt","Congo, Dem. Rep.", "Germany","Iran","Turkey","France","United Kingdom","Italy","Tanzania","South Africa","Myanmar","Korea","Colombia","Thailand"];
+    var codes = ["USA","CHN"  ,"IDN"      ,"IND"  ,"BRA"   ,"PAK"     ,"NGA"    ,"BGD"       ,"RUS"    ,"JPN" ,"MEX"   ,"PHL"         ,"ETH"    ,"VNM"    ,"EGY"  ,"ZAR"             ,"DEU"     ,"IRN" ,"TUR"   ,"FRA"   ,"GBR"           ,"ITA"  ,"TZA"     ,"ZAF"         ,"MMR"     ,"PRK" ,"COL"     ,"THA"];
+    for (var i = 0; i < codes.length;i++){
+      if (codes[i] == c){
+        return names[i];
+      }
+    }
+    return c;
+  }
+  $(window).ready(function(){
+  	console.log("READY");
+  	// On button clicks
+  	var p_sc, spike_sc, spike_country, spike_amt;
+  	$("#run").click(function(){
+  		console.log("RUNNING");
+
+  		p_sc = $("#p_sc").val().trim();
+  		spike_sc = $("#spike_sc").val().trim();
+  		spike_amt = $("#spike_amt").val().trim();
+  		spike_country = $("#spike_cc").val().trim();
+  		$.get("/calc?p_sc="+p_sc+"&spike_sc="+spike_sc+"&spike_amt="+spike_amt+"&spike_cc=" + spike_country, function(v){
+        var countries = [];
+        var effects = [];
+  			for (var k in v){
+          console.log(k, ctranslate(k));
+          countries.push(ctranslate(k));
+          effects.push(v[k]);
+        }
+        console.log(countries, effects);
+        loadMap(countries, effects);
+  		});
+  	});
+
+  });
+  </script>
 </head>
   <body>
   <div class="container">
     <h1>Micro Anomaly Impact</h1>
-    <p>Viewing for year: <em id="current-year"></em></p>
-    <div id="slider-range"></div>
-    <p>Currently viewing:</p>
-    <select>
-      <option value="volvo">Volvo</option>
-      <option value="saab">Saab</option>
-      <option value="mercedes">Mercedes</option>
-      <option value="audi">Audi</option>
-    </select>
+    <input id='p_sc' value='SL.TLF.TOTL.IN' placeholder='Series Code to Predict'/>
+    <input id='spike_sc' value='SL.TLF.TOTL.FE.ZS' placeholder='Series Code to Spike'/>
+    <input id='spike_cc' value='USA' placeholder='Country to Spike'/>
+    <input id='spike_amt' value='100000000000' placeholder='Amount to spike'/>
+    <button id='run'>run</button>
     <div id="map"></div>
 
     <!-- Customization section -->
