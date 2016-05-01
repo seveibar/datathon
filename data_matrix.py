@@ -6,7 +6,17 @@ years = [str(a) for a in range(1991,2030)]
 
 maxyear = 2015
 minyear = 2006
-maxdeltay = 3
+maxdeltay = 2
+
+# Removes countries not on whitelist
+def apply_country_whitelist(whitelist):
+    global dat
+    newdat = []
+    for c in whitelist:
+        for d in dat[dat['Country Code'] == c]:
+            newdat.append(d)
+    dat = np.array(newdat, dtype=dat.dtype)
+    
 
 # Gets the X row, this is a super long row that contains all the delta slopes
 def get_xrow(p_sc, cc, yearno):
@@ -39,10 +49,6 @@ def get_xrow_with_spike(p_sc=None, p_cc=None, year=None, spike_sc=None, spike_cc
         # Now we input the delta to the xrow
         for deltay in range(1,maxdeltay+1):
             if sc["Series Code"] == spike_sc and sc["Country Code"] == spike_cc:
-                print(sc[years[yearno_s - 1]],
-                      (sc[years[yearno_s - 1]] + spike_amt) - sc[years[yearno_s - deltay - 1]],
-                      sc[years[yearno_s - 1]] + spike_amt,
-                      sc[years[yearno_s - deltay - 1]])
                 xrow.append((sc[years[yearno_s - 1]] + spike_amt) - sc[years[yearno_s - deltay - 1]])
             else:
                 xrow.append(sc[years[yearno_s - 1]] - sc[years[yearno_s - deltay - 1]])
